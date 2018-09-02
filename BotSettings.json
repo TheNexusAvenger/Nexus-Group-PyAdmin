@@ -1,0 +1,24 @@
+{
+  "MaxPostsPerRequest": "100",
+
+  "GlobalUserBanList": [],
+  "GlobalPostBlackList": [],
+
+  "LightScanLoopDelayInSeconds": 30,
+  "LightScanLoopIterations": 10,
+
+  "GroupBots": [
+    {
+      "GroupId": 1131535,
+      "GroupRank": 19,
+      "Username": "TheBotAvenger",
+      "Password": "PASSWORD_GOES_HERE",
+
+      "RemovePostsFromList": true,
+      "RemovePostsOnLeave": true,
+      "RemoveMembers": false,
+      "UserBanList": [],
+      "PostBlackList": []
+    }
+  ]
+}
