@@ -13,17 +13,17 @@ To use all the included features, the bot must have the following:
 
 It is recommended that only the needed permissions are enabled when they come up. If there is a data breach, the bot may become compromised and start removing members randomly.
 
-# Dependancies
+# Dependencies
 The bot currently requires the "requests" library. If you don't have requests, and are able to control the Python install, requests can be installed using the following:
 
 ```
 pip install requests
 ```
 
-If you aren't able to control your install, like in a shared hosting environment, you will need to down the approriate requests folder from the [requests repository](https://github.com/requests/requests/releases).
+If you aren't able to control your install, like in a shared hosting environment, you will need to down the appropriate requests folder from the [requests repository](https://github.com/requests/requests/releases).
 
 # Setup
-Setup of the bot requires an environment with a Python install. Python 2 and Python 3 both work as long as requests is included (see Dependancies). It is recommended to use a dedicated host, as apposed to a spare computer, to ensure it is always online. The bot is intended to be run using the command line with the following commands:
+Setup of the bot requires an environment with a Python install. Python 2 and Python 3 both work as long as requests is included (see Dependencies). It is recommended to use a dedicated host, as opposed to a spare computer, to ensure it is always online. The bot is intended to be run using the command line with the following commands:
 
 ```
 python LOCATION/GroupAdminBot.py LightScan
@@ -38,11 +38,11 @@ Runs the same behavior as LightScan, but performs if every LightScanLoopDelayInS
 ```
 python LOCATION/GroupAdminBot.py FullScan
 ```
-Goes through the entire ban list and all of the group wall posts. Full scans should be run rarely (like once an hour) because of the amount of requests created, and LightScan typically gets most of important messages. Loop isn't implemented for this.
+Goes through the entire ban list and all of the group wall posts. Full scans should be run rarely (like once an hour) because of the number of requests created, and LightScan typically gets most of the important messages. Loop isn't implemented for this.
 
 # BotSettings.json
 BotSettings.json stores the settings for running the bot as a JSON file. The following parameters include:
-*  MaxPostsPerRequest - the amount of posts to grab in each request. It must be "10", "25", "50", or "100".
+*  MaxPostsPerRequest - the number of posts to grab in each request. It must be "10", "25", "50", or "100".
 *  GlobalUserBanList - A list of the user ids of banned users. All bots use this list.
 *  GlobalPostBlackList - A list of blacklisted phrases in the group wall. All bots use this list. Regular expressions can be used.
 *  LightScanLoopDelayInSeconds - Delay between running the LightScan in a loop.
@@ -55,5 +55,5 @@ BotSettings.json stores the settings for running the bot as a JSON file. The fol
     * RemovePostsFromList - A bool that determines if the bot should remove blacklisted posts.
     * RemovePostsOnLeave - A bool that determines if the bot should remove posts from users that have left.
     * RemoveMembers - A bool that determines if the bot should exile banned users.
-    * UserBanList - Same as GlobalUserBanList, but only applies for that group.
-    * PostBlackList - Same as GlobalPostBlackList, but only applies for that group.
+    * UserBanList - Same as GlobalUserBanList, but only applies to that group.
+    * PostBlackList - Same as GlobalPostBlackList, but only applies to that group.
