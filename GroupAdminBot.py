@@ -1,6 +1,7 @@
 """
 TheNexusAvenger
 Automated bot for deleting posts by users who have left.
+Also handles bans and duplicate posts.
 
 Roblox HTTP(S) Documentation:
 https://groups.roblox.com/docs
@@ -43,8 +44,13 @@ class RobloxBot(object):
 		self.removePostsFromList = False
 		self.removePostsOnLeave = False
 		self.removeMembers = False
+		self.removeDuplicatePostsBySameUser = False
 		self.postBlackList = []
 		self.userBanList = []
+
+		# Store base last post information.
+		self.lastPostText = ""
+		self.lastPostAuthorId = 0
 
 	# Adds a site header to the list of headers.
 	def addSiteKeyToHeaders(self,headers,url):
@@ -61,6 +67,7 @@ class RobloxBot(object):
 	# Returns if a posts should be deleted.
 	def shouldPostBeDeleted(self,postData):
 		posterRank = int(postData["poster"]["role"]["rank"])
+		posterId = int(postData["poster"]["role"]["id"])
 		postBody = postData["body"]
 
 		if posterRank == 0:
@@ -73,6 +80,14 @@ class RobloxBot(object):
 				for pattern in GLOBAL_POST_BLACK_LIST:
 					if re.search(pattern,postBody) != None:
 						return True
+
+			# Handle duplicate posts.
+			if self.removeDuplicatePostsBySameUser:
+				if self.lastPostAuthorId == posterId and self.lastPostText == postBody:
+					return True
+
+				self.lastPostText = postBody
+				self.lastPostAuthorId = posterId
 
 		# Return false (don't delete).
 		return False
@@ -90,11 +105,12 @@ class RobloxBot(object):
 		return response.status_code < 400
 
 	# Sets the bot rules for deleting posts.
-	def SetPostDeletionRules(self,botGroupRank,removePostsFromList,removePostsOnLeave,postBlackList):
+	def SetPostDeletionRules(self,botGroupRank,removePostsFromList,removePostsOnLeave,postBlackList,removeDuplicatePostsBySameUser):
 		self.botGroupRank = botGroupRank
 		self.removePostsFromList = removePostsFromList
 		self.removePostsOnLeave = removePostsOnLeave
 		self.postBlackList = postBlackList
+		self.removeDuplicatePostsBySameUser = removeDuplicatePostsBySameUser
 
 		for pattern in GLOBAL_POST_BLACK_LIST:
 			if not pattern in self.postBlackList:
@@ -210,6 +226,7 @@ def RunLightScanForGroup(groupData):
 	botPassword = groupData["Password"]
 	removePostsFromList = groupData["RemovePostsFromList"]
 	removePostsOnLeave = groupData["RemovePostsOnLeave"]
+	removeDuplicatePostsBySameUser = ("RemoveDuplicatePostsBySameUser" in groupData and groupData["RemoveDuplicatePostsBySameUser"] or False)
 	removeMembers = groupData["RemoveMembers"]
 	userBanList = groupData["UserBanList"]
 	postBlackList = groupData["PostBlackList"]
@@ -218,7 +235,7 @@ def RunLightScanForGroup(groupData):
 	if removePostsFromList or removePostsOnLeave or removeMembers:
 		bot = RobloxBot()
 		bot.SignIn(botUsername,botPassword)
-		bot.SetPostDeletionRules(botGroupRank,removePostsFromList,removePostsOnLeave,postBlackList)
+		bot.SetPostDeletionRules(botGroupRank,removePostsFromList,removePostsOnLeave,postBlackList,removeDuplicatePostsBySameUser)
 		bot.SetExileRules(botGroupRank,removeMembers,userBanList)
 		bot.ExileUsers(groupId)
 		bot.DeletePosts(groupId,False)
