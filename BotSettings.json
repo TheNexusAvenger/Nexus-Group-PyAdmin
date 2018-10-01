@@ -16,6 +16,7 @@
 
       "RemovePostsFromList": true,
       "RemovePostsOnLeave": true,
+      "RemoveDuplicatePostsBySameUser": true,
       "RemoveMembers": false,
       "UserBanList": [],
       "PostBlackList": []
