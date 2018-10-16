@@ -66,6 +66,10 @@ class RobloxBot(object):
 
 	# Returns if a posts should be deleted.
 	def shouldPostBeDeleted(self,postData):
+		# Return true if the poster is banned.
+		if postData["poster"] is None:
+			return True
+		
 		posterRank = int(postData["poster"]["role"]["rank"])
 		posterId = int(postData["poster"]["role"]["id"])
 		postBody = postData["body"]
